@@ -1,8 +1,6 @@
 package io.gustavoemf.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -19,5 +17,6 @@ public class Quiz extends BaseEntity {
     @Size(max = 500)
     public String description;
 
-    public List<String> questions;
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public List<Question> questions;
 }
