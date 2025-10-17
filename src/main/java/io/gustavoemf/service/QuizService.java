@@ -6,6 +6,7 @@ import io.gustavoemf.mapping.QuizPartialUpdateMapper;
 import io.gustavoemf.repository.QuizRepository;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.quarkus.logging.Log;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.ConstraintViolationException;
@@ -91,5 +92,21 @@ public class QuizService {
         }
 
         return quiz;
+    }
+
+    @WithTransaction
+    public Uni<Void> deleteAllQuizzes() {
+
+        Log.debug("Deleting all quizzes");
+        return this.quizRepository.deleteAll()
+                .invoke(() -> Log.debug("All quizzes deleted"))
+                .replaceWithVoid();
+    }
+
+    @WithTransaction
+    public Uni<Void> deleteQuiz(Long id) {
+
+        Log.debugf("Deleting quiz by id = %d", id);
+        return this.quizRepository.deleteById(id).replaceWithVoid();
     }
 }

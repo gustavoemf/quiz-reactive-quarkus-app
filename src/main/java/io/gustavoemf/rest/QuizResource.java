@@ -32,56 +32,55 @@ public class QuizResource {
 
     @GET
     public Uni<List<Quiz>> getAllQuizzes() {
-        return quizService.findAllQuizzes()
-                .replaceIfNullWith(List::of)
-                .invoke(quizzes -> Log.debugf("Total number of quizzes found: %d", quizzes.size()));
+
+        return quizService.findAllQuizzes().replaceIfNullWith(List::of).invoke(quizzes -> Log.debugf("Total number of quizzes found: %d", quizzes.size()));
     }
 
     @GET
     @Path("/{id}")
     public Uni<Response> getQuiz(@PathParam("id") Long id) {
-        return quizService.findQuizById(id)
-                .onItem().ifNotNull().transform(quiz -> {
-                    Log.debugf("Found quiz: %s", quiz);
-                    return Response.ok(quiz).build();
-                })
-                .onItem().ifNull().continueWith(() -> {
-                    Log.debugf("No quiz found with id %d", id);
-                    return Response.status(Response.Status.NOT_FOUND).build();
-                });
+
+        return quizService.findQuizById(id).onItem().ifNotNull().transform(quiz -> {
+            Log.debugf("Found quiz: %s", quiz);
+            return Response.ok(quiz).build();
+        }).onItem().ifNull().continueWith(() -> {
+            Log.debugf("No quiz found with id %d", id);
+            return Response.status(Response.Status.NOT_FOUND).build();
+        });
     }
 
     @POST
     public Uni<Response> createQuiz(@NotNull @Valid Quiz quiz, @Context UriInfo uriInfo) {
-        return this.quizService.persistQuiz(quiz)
-                .map(q -> {
-                    var uri = uriInfo.getAbsolutePathBuilder().path(Long.toString(q.id)).build();
-                    Log.debugf("New Quiz created with URI %s", uri.toString());
-                    return Response.created(uri).build();
-                });
+
+        return this.quizService.persistQuiz(quiz).map(q -> {
+            var uri = uriInfo.getAbsolutePathBuilder().path(Long.toString(q.id)).build();
+
+            Log.debugf("New Quiz created with URI %s", uri.toString());
+            return Response.created(uri).build();
+        });
     }
 
     @PUT
     @Path("/{id}")
     public Uni<Response> updateQuiz(@PathParam("id") Long id, @NotNull @Valid Quiz quiz) {
+
         if (quiz.id == null) {
             quiz.id = id;
         }
 
-        return this.quizService.replaceQuiz(quiz)
-                .onItem().ifNotNull().transform(q -> {
-                    Log.debugf("Quiz replaced with new values %s", q);
-                    return Response.noContent().build();
-                })
-                .replaceIfNullWith(() -> {
-                    Log.debugf("No quiz found with id %d", quiz.id);
-                    return Response.status(Response.Status.NOT_FOUND).build();
-                });
+        return this.quizService.replaceQuiz(quiz).onItem().ifNotNull().transform(q -> {
+            Log.debugf("Quiz replaced with new values %s", q);
+            return Response.noContent().build();
+        }).replaceIfNullWith(() -> {
+            Log.debugf("No quiz found with id %d", quiz.id);
+            return Response.status(Response.Status.NOT_FOUND).build();
+        });
     }
 
     @PATCH
     @Path("/{id}")
     public Uni<Response> partiallyUpdateQuiz(@PathParam("id") Long id, @NotNull @Valid Quiz quiz) {
+
         if (quiz.id == null) {
             quiz.id = id;
         }
@@ -90,13 +89,24 @@ public class QuizResource {
                 .onItem().ifNotNull().transform(q -> {
                     Log.debugf("Quiz updated with new values %s", q);
                     return Response.ok(q).build();
-                })
-                .onItem().ifNull().continueWith(() -> {
+                }).onItem().ifNull().continueWith(() -> {
                     Log.debugf("No Quiz found with id %d", quiz.id);
                     return Response.status(Response.Status.NOT_FOUND).build();
-                })
-                .onFailure(ConstraintViolationException.class)
-                .transform(cve -> new ResteasyReactiveViolationException(((ConstraintViolationException) cve).getConstraintViolations()));
+                }).onFailure(ConstraintViolationException.class).transform(cve ->
+                        new ResteasyReactiveViolationException(((ConstraintViolationException) cve).getConstraintViolations()));
+    }
+
+    @DELETE
+    public Uni<Void> deleteAllQuizzes() {
+        return this.quizService.deleteAllQuizzes()
+                .invoke(() -> Log.debug("Deleted all quizzes"));
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Uni<Void> deleteQuiz(@PathParam("id") Long id) {
+        return this.quizService.deleteQuiz(id)
+                .invoke(() -> Log.debugf("Quiz deleted with %d", id));
     }
 
     @GET
@@ -104,6 +114,7 @@ public class QuizResource {
     @Produces(TEXT_PLAIN)
     @NonBlocking
     public String ping() {
+
         Log.debug("Ping Quiz Resource");
         return "pong";
     }
