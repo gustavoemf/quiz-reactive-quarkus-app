@@ -5,8 +5,12 @@ import io.gustavoemf.service.QuizService;
 import io.quarkus.logging.Log;
 import io.smallrye.common.annotation.NonBlocking;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 
 import java.util.List;
 
@@ -42,6 +46,16 @@ public class QuizResource {
                 .replaceIfNullWith(() -> {
                     Log.debugf("No quiz found with id %d", id);
                     return Response.status(Response.Status.NOT_FOUND).build();
+                });
+    }
+
+    @POST
+    public Uni<Response> createQuiz(@NotNull @Valid Quiz quiz, @Context UriInfo uriInfo) {
+        return this.quizService.persistQuiz(quiz)
+                .map(q -> {
+                    var uri = uriInfo.getAbsolutePathBuilder().path(Long.toString(q.id)).build();
+                    Log.debugf("New Quiz created with URI %s", uri.toString());
+                    return Response.created(uri).build();
                 });
     }
 
