@@ -37,13 +37,13 @@ public class QuizResource {
 
     @GET
     @Path("/{id}")
-    public Uni<Response> getQuizz(@PathParam("id") Long id) {
+    public Uni<Response> getQuiz(@PathParam("id") Long id) {
         return quizService.findQuizById(id)
                 .onItem().ifNotNull().transform(quiz -> {
                     Log.debugf("Found quiz: %s", quiz);
                     return Response.ok(quiz).build();
                 })
-                .replaceIfNullWith(() -> {
+                .onItem().ifNull().continueWith(() -> {
                     Log.debugf("No quiz found with id %d", id);
                     return Response.status(Response.Status.NOT_FOUND).build();
                 });
