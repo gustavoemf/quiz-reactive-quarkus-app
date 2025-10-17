@@ -1,6 +1,5 @@
 package io.gustavoemf.domain;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 import jakarta.persistence.*;
 
 import java.time.Instant;
