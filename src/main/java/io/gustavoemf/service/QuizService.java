@@ -6,7 +6,6 @@ import io.gustavoemf.mapping.QuizPartialUpdateMapper;
 import io.gustavoemf.repository.QuizRepository;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.quarkus.logging.Log;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.ConstraintViolationException;

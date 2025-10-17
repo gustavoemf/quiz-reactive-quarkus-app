@@ -9,5 +9,6 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.JAKARTA_CDI, nullValuePropertyMappingStrategy = IGNORE)
 public interface QuizPartialUpdateMapper {
+
     void mapPartialUpdate(Quiz input, @MappingTarget Quiz target);
 }

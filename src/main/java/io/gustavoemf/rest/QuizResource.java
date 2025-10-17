@@ -33,7 +33,8 @@ public class QuizResource {
     @GET
     public Uni<List<Quiz>> getAllQuizzes() {
 
-        return quizService.findAllQuizzes().replaceIfNullWith(List::of).invoke(quizzes -> Log.debugf("Total number of quizzes found: %d", quizzes.size()));
+        return quizService.findAllQuizzes().replaceIfNullWith(List::of)
+                .invoke(quizzes -> Log.debugf("Total number of quizzes found: %d", quizzes.size()));
     }
 
     @GET
