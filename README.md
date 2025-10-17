@@ -11,8 +11,7 @@ O objetivo é implementar e estudar cada tecnologia passo a passo.
 - [ ] **Etapa 1: Quarkus Básico**
   - Criar projeto Quarkus
   - Adicionar extensões básicas (`resteasy-reactive`)
-  - Endpoints de teste (`/ping`, `/hello/{name}`)
-  - Testar Uni / Multi com Mutiny
+  - Endpoint de HealthCheck **quarkus-smallrye-health**
 
 - [ ] **Etapa 2: Banco de Dados (PostgreSQL Reativo)**
   - Adicionar `quarkus-reactive-pg-client` ou `hibernate-reactive-panache`
@@ -40,6 +39,12 @@ O objetivo é implementar e estudar cada tecnologia passo a passo.
   - Separar serviços: Quiz, User, Score, Notification
   - Testar comunicação via REST ou Kafka
   - Garantir integração com cache e DB
+     
+- [ ] **Etapa 7: Observabilidade**
+  - Adicionar logging estruturado (Quarkus Logging + JSON)
+  - Adicionar métricas com **Micrometer / SmallRye Metrics**
+  - Tracing distribuído com **OpenTelemetry / Jaeger**
+  - Dashboard (Grafana / Prometheus)/(ELK) opcional para monitorar métricas
 
 ---
 
