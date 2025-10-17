@@ -2,9 +2,11 @@ package io.gustavoemf.rest;
 
 import io.gustavoemf.domain.Quiz;
 import io.gustavoemf.service.QuizService;
+import io.quarkus.hibernate.validator.runtime.jaxrs.ResteasyReactiveViolationException;
 import io.quarkus.logging.Log;
 import io.smallrye.common.annotation.NonBlocking;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
@@ -75,6 +77,26 @@ public class QuizResource {
                     Log.debugf("No quiz found with id %d", quiz.id);
                     return Response.status(Response.Status.NOT_FOUND).build();
                 });
+    }
+
+    @PATCH
+    @Path("/{id}")
+    public Uni<Response> partiallyUpdateQuiz(@PathParam("id") Long id, @NotNull @Valid Quiz quiz) {
+        if (quiz.id == null) {
+            quiz.id = id;
+        }
+
+        return this.quizService.partialUpdateQuiz(quiz)
+                .onItem().ifNotNull().transform(q -> {
+                    Log.debugf("Quiz updated with new values %s", q);
+                    return Response.ok(q).build();
+                })
+                .onItem().ifNull().continueWith(() -> {
+                    Log.debugf("No Quiz found with id %d", quiz.id);
+                    return Response.status(Response.Status.NOT_FOUND).build();
+                })
+                .onFailure(ConstraintViolationException.class)
+                .transform(cve -> new ResteasyReactiveViolationException(((ConstraintViolationException) cve).getConstraintViolations()));
     }
 
     @GET
