@@ -1,67 +1,69 @@
-# quiz-app
+# Quiz Reactive Project
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+## Descrição
+Projeto de quiz multiplayer usando **Quarkus reativo**, **PostgreSQL**, **Redis**, **Kafka**, **Keycloak** e arquitetura de microsserviços.  
+O objetivo é implementar e estudar cada tecnologia passo a passo.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+---
 
-## Running the application in dev mode
+## Status do Projeto
 
-You can run your application in dev mode that enables live coding using:
+- [ ] **Etapa 1: Quarkus Básico**
+  - Criar projeto Quarkus
+  - Adicionar extensões básicas (`resteasy-reactive`)
+  - Endpoints de teste (`/ping`, `/hello/{name}`)
+  - Testar Uni / Multi com Mutiny
 
-```shell script
+- [ ] **Etapa 2: Banco de Dados (PostgreSQL Reativo)**
+  - Adicionar `quarkus-reactive-pg-client` ou `hibernate-reactive-panache`
+  - Criar entidade `Quiz`
+  - CRUD básico de quizzes
+  - Testar persistência e listagem
+
+- [ ] **Etapa 3: Cache com Redis**
+  - Adicionar extensão `quarkus-redis-client`
+  - Criar serviço de cache para quizzes e ranking
+  - Testar TTL de cache e integração com PostgreSQL
+
+- [ ] **Etapa 4: Kafka**
+  - Adicionar `quarkus-smallrye-reactive-messaging-kafka`
+  - Criar producer/consumer para eventos de respostas e ranking
+  - Testar comunicação assíncrona
+
+- [ ] **Etapa 5: Autenticação com Keycloak**
+  - Subir Keycloak local ou docker
+  - Configurar realm, cliente e roles
+  - Adicionar `quarkus-oidc`
+  - Proteger endpoints (admin e usuário)
+
+- [ ] **Etapa 6: Microsserviços**
+  - Separar serviços: Quiz, User, Score, Notification
+  - Testar comunicação via REST ou Kafka
+  - Garantir integração com cache e DB
+
+---
+
+## Como rodar o projeto
+
+### 1. Rodar em modo dev (hot reload)
+```bash
 ./gradlew quarkusDev
 ```
+Isso vai iniciar o Quarkus em modo desenvolvimento. Qualquer alteração no código será recarregada automaticamente.
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
-
-## Packaging and running the application
-
-The application can be packaged using:
-
-```shell script
+### 2. Build do projeto
+```bash
 ./gradlew build
 ```
 
-It produces the `quarkus-run.jar` file in the `build/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `build/quarkus-app/lib/` directory.
+Isso gera o jar do projeto em build/quarkus-app/quarkus-run.jar.
 
-The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./gradlew build -Dquarkus.package.jar.type=uber-jar
+### 3. Rodar o jar gerado
+```bash
+java -jar build/quarkus-app/quarkus-run.jar
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar build/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./gradlew build -Dquarkus.native.enabled=true
+### 4. Rodar testes
+```bash
+./gradlew test
 ```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./gradlew build -Dquarkus.native.enabled=true -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./build/quiz-app-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/gradle-tooling>.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
-# quiz-reactive-quarkus-app
-# quiz-reactive-quarkus-app
-# quiz-reactive-quarkus-app
-# quiz-reactive-quarkus-app
-# quiz-reactive-quarkus-app
