@@ -59,6 +59,24 @@ public class QuizResource {
                 });
     }
 
+    @PUT
+    @Path("/{id}")
+    public Uni<Response> updateQuiz(@PathParam("id") Long id, @NotNull @Valid Quiz quiz) {
+        if (quiz.id == null) {
+            quiz.id = id;
+        }
+
+        return this.quizService.replaceQuiz(quiz)
+                .onItem().ifNotNull().transform(q -> {
+                    Log.debugf("Quiz replaced with new values %s", q);
+                    return Response.noContent().build();
+                })
+                .replaceIfNullWith(() -> {
+                    Log.debugf("No quiz found with id %d", quiz.id);
+                    return Response.status(Response.Status.NOT_FOUND).build();
+                });
+    }
+
     @GET
     @Path("/ping")
     @Produces(TEXT_PLAIN)
