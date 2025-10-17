@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
-@Table(name = "questions", schema = "quiz_app")
+@Table(name = "questions")
 public class Question extends BaseEntity {
 
     @NotBlank

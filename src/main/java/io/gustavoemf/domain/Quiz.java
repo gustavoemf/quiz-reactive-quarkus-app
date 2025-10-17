@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 
 @Entity
-@Table(name = "quizzes", schema = "quiz_app")
+@Table(name = "quizzes")
 public class Quiz extends BaseEntity {
 
     @NotBlank
