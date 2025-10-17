@@ -43,4 +43,14 @@ public class Quiz extends BaseEntity {
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
+
+    @Override
+    public String toString() {
+        return "Quiz{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", questions=" + questions +
+                '}';
+    }
 }

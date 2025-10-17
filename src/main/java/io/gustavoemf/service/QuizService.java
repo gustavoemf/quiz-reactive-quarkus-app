@@ -21,4 +21,9 @@ public class QuizService {
         Log.debug("Getting all quizzes");
         return quizRepository.listAll();
     }
+
+    public Uni<Quiz> findQuizById(Long id) {
+        Log.debugf("Finding quiz by id = %d", id);
+        return quizRepository.findById(id);
+    }
 }
